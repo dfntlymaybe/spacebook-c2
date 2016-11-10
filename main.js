@@ -3,6 +3,7 @@ function post(text){
   this.text = text;
   this.id = ++post.counter;
   this.comments = [];
+  this.likes = 0;
 }
 
 //static counter (for unique id's)
@@ -29,25 +30,18 @@ function publishComments(){
 
   var postComments = $(this).closest('.current-post').find('.comments-block').eq(0).find('p');
   if(postComments.length > 0){
-
     $(this).closest('.current-post').find('.comments-block').eq(0).empty();
-
   }else{
-
     var id = $(this).closest('.current-post').find('p').eq(0).data().id;
-
     for(var i = 0; i < posts.length; i++){
       if(id == posts[i].id){
-     
         for(var j = 0; j < posts[i].comments.length; j++ ){
           $(this).closest('.current-post').find('.comments-block').eq(0).append("<p>" + posts[i].comments[j].userName + ": " + posts[i].comments[j].text + "</p>");
         }
-
       return;
       }  
     } 
   }
-  
 }
 
 //Adding comment to the main array
@@ -56,33 +50,47 @@ function addComment(){
   var inputArr = $(this).closest('div').find('input');
   var userName = $(inputArr[0]).val();
   var userCcomment = $(inputArr[1]).val();
-  var currentComment = new comment(userName,userCcomment);
-  clearForm()
+  debugger;
+  if(userName != "" || userCcomment != ""){ //checking that both fields are not empty
+    var currentComment = new comment(userName,userCcomment);
+    clearForm()
+    var id = $(this).closest('.current-post').find('p').eq(0).data().id;
+    //console.log(id);
+    for(var i = 0; i < posts.length; i++){
+      if(id == posts[i].id){
+        posts[i].comments.push(currentComment);
+        
+        $(this).closest('.current-post').find('.comments-link').eq(0)[0].innerHTML = posts[i].comments.length + " comments";
+        return;
+      }
+    } 
+  }
+}
+
+function addLike(){
   var id = $(this).closest('.current-post').find('p').eq(0).data().id;
-  console.log(id);
   for(var i = 0; i < posts.length; i++){
-    if(id == posts[i].id){
-      posts[i].comments.push(currentComment);
-      
-      $(this).closest('.current-post').find('.comments-link').eq(0)[0].innerHTML = posts[i].comments.length + " comments";
-      return;
-    }
-  } 
+      if(id == posts[i].id){
+        posts[i].likes++;
+        $(this).closest('.current-post').find('.likes-link').eq(0)[0].innerHTML = " " + posts[i].likes + " Likes";
+        return;
+      }
+    } 
 }
 
 //update posts on the screen
 function updatePosts(){
   $('.posts').empty();
   for(var i = 0; i < posts.length;  i++){
-    var postStr = '<div class="current-post"><p class="post" data-id="' + posts[i].id + '">'+  posts[i].text + '<a href="#" class="comments-link"> ' + posts[i].comments.length + ' comments</a></p><div class="comments-block"></div><a href="#" class="remove">remove post</a>';
+    var postStr = '<div class="current-post"><p class="post" data-id="' + posts[i].id + '">'+  posts[i].text + '<a href="#" class="comments-link">  ' + posts[i].comments.length + ' Comments</a><a href="#" class="likes-link"> ' + posts[i].likes + ' Likes</a></p><div class="comments-block"></div><a href="#" class="remove">remove post</a>';
     var commentStr = '<form class="form-inline"><div class="form-group"><input type="text" class="form-control" id="userName" placeholder="User Name"></div><div class="form-group"><input type="text" class="form-control" id="comment" placeholder="Comment"></div><button type="submit" class="btn btn-primary post-comment">Post Comment</button></form></div>'
     $('.posts').append(postStr + commentStr);
   }
   $('.remove').on('click', removePost);
   $('.post-comment').on('click', addComment);
   $('.comments-link').on('click', publishComments);
+  $('.likes-link').on('click', addLike);
 }
-
 
 //remove a post from the array and the screen
 function removePost(){
