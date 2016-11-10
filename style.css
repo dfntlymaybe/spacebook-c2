@@ -4,9 +4,15 @@
   height: 100%;
 }
 .post{
-  font-size: 22px;
+  font-size: 24px;
 }
 .post a{
-  font-size: 12px;
+  font-size: 14px;
   color: grey;
+}
+.comments-block p{
+  font-size: 16px;
+}
+.comments-block a{
+  font-size: 12px;
 }
