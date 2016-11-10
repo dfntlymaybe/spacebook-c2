@@ -29,19 +29,18 @@ function createPost(text){
 }
 
 //show comments of the post that were clicked on
-function publishComments(){
+function publishComments(currentPost){
   event.preventDefault();
-
-  var postComments = $(this).closest('.current-post').find('.comments-block').eq(0).find('p');
+  var postComments = currentPost.find('.comments-block').eq(0).find('p');
   if(postComments.length > 0){
-    $(this).closest('.current-post').find('.comments-block').eq(0).empty();
+    currentPost.find('.comments-block').eq(0).empty();
   }else{
-    var id = $(this).closest('.current-post').find('p').eq(0).data().id;
+    var id = currentPost.find('p').eq(0).data().id;
     for(var i = 0; i < posts.length; i++){
       if(id == posts[i].id){
         for(var j = 0; j < posts[i].comments.length; j++ ){
           var currentComment = "<p data-id='" + posts[i].comments[j].id + "'>" + posts[i].comments[j].userName + ": " + posts[i].comments[j].text + "<a href='#'' class='remove-comment'> remove comment</a></p>"
-          $(this).closest('.current-post').find('.comments-block').eq(0).append(currentComment);
+          currentPost.find('.comments-block').eq(0).append(currentComment);
           $('.remove-comment').on('click', removeComment);
         }
       return;
@@ -51,20 +50,21 @@ function publishComments(){
 }
 
 //Adding comment to the main array
-function addComment(){
+function addComment(currentPost){
   event.preventDefault();
-  var inputArr = $(this).closest('div').find('input');
+  var inputArr = currentPost.find('input');
   var userName = $(inputArr[0]).val();
   var userCcomment = $(inputArr[1]).val();
   if(userName != "" || userCcomment != ""){ //checking that both fields are not empty
     var currentComment = new comment(userName,userCcomment);
     clearForm()
-    var id = $(this).closest('.current-post').find('p').eq(0).data().id;
+    var id = currentPost.find('p').eq(0).data().id;
     //console.log(id);
     for(var i = 0; i < posts.length; i++){
       if(id == posts[i].id){
         posts[i].comments.push(currentComment);      
-        $(this).closest('.current-post').find('.comments-link').eq(0)[0].innerHTML = " " + posts[i].comments.length + " comments";
+        currentPost.find('.comments-link').eq(0)[0].innerHTML = " " + posts[i].comments.length + " comments";
+        publishComments(currentPost);
         return;
       }
     } 
@@ -89,12 +89,12 @@ function removeComment(){
   } 
 }
 
-function addLike(){
-  var id = $(this).closest('.current-post').find('p').eq(0).data().id;
+function addLike(currentPost){
+  var id = currentPost.find('p').eq(0).data().id;
   for(var i = 0; i < posts.length; i++){
     if(id == posts[i].id){
       posts[i].likes++;
-      $(this).closest('.current-post').find('.likes-link').eq(0)[0].innerHTML = " " + posts[i].likes + " Likes";
+      currentPost.find('.likes-link').eq(0)[0].innerHTML = " " + posts[i].likes + " Likes";
       return;
     }
   } 
@@ -113,19 +113,34 @@ function updatePosts(){
      + '</div><button type="submit" class="btn btn-primary post-comment">Post Comment</button></form></div>'
     $('.posts').append(postStr);
   }
-  $('.remove').on('click', removePost);
-  $('.post-comment').on('click', addComment);
-  $('.comments-link').on('click', publishComments);
-  $('.likes-link').on('click', addLike);
+
+  $('.remove').on('click', function(){
+    removePost($(this).closest('.current-post'));
+  });
+  
+  $('.post-comment').on('click', function(){
+    addComment($(this).closest('.current-post'));
+  });
+
+  $('.comments-link').on('click', function(){
+    publishComments($(this).closest('.current-post'));
+  });
+  
+  $('.likes-link').on('click', function(){
+    addLike($(this).closest('.current-post'));
+  });
 }
 
+
+
+
 //remove a post from the array and the screen
-function removePost(){
-  var id = $(this).closest('.current-post').find('p').eq(0).data().id;
+function removePost(currentPost){
+  var id = currentPost.find('p').eq(0).data().id;
   for(var i = 0; i < posts.length; i++){
     if(id == posts[i].id){
       posts.splice(i, 1);
-      $(this).closest('.current-post').remove();
+      currentPost.remove();
       return;
     }
   }      
