@@ -28,30 +28,36 @@ function createPost(text){
   posts.push(currentPost);
 }
 
-//show comments of the post that were clicked on
-function publishComments(currentPost){
-  event.preventDefault();
+//toggle comments
+function toggleComments(currentPost){
   var postComments = currentPost.find('.comments-block').eq(0).find('p');
   if(postComments.length > 0){
     currentPost.find('.comments-block').eq(0).empty();
   }else{
-    var id = currentPost.find('p').eq(0).data().id;
-    for(var i = 0; i < posts.length; i++){
-      if(id == posts[i].id){
-        for(var j = 0; j < posts[i].comments.length; j++ ){
-          var currentComment = "<p data-id='" + posts[i].comments[j].id + "'>" + posts[i].comments[j].userName + ": " + posts[i].comments[j].text + "<a href='#'' class='remove-comment'> remove comment</a></p>"
-          currentPost.find('.comments-block').eq(0).append(currentComment);
-          $('.remove-comment').on('click', removeComment);
-        }
-      return;
-      }  
-    } 
+    publishComments(currentPost);  
   }
 }
 
+//show comments of the post that were clicked on
+function publishComments(currentPost){
+  currentPost.find('.comments-block').eq(0).empty();
+  var id = currentPost.find('p').eq(0).data().id;
+  for(var i = 0; i < posts.length; i++){
+    if(id == posts[i].id){
+      for(var j = 0; j < posts[i].comments.length; j++ ){
+        var currentComment = "<p data-id='" + posts[i].comments[j].id + "'>" + posts[i].comments[j].userName + ": " + posts[i].comments[j].text + "<a href='#'' class='remove-comment'> remove comment</a></p>"
+        currentPost.find('.comments-block').eq(0).append(currentComment);
+      }
+      $('.remove-comment').on('click', removeComment);
+      return;
+    }
+  }
+}
+
+
+
 //Adding comment to the main array
 function addComment(currentPost){
-  event.preventDefault();
   var inputArr = currentPost.find('input');
   var userName = $(inputArr[0]).val();
   var userCcomment = $(inputArr[1]).val();
@@ -105,34 +111,36 @@ function updatePosts(){
   $('.posts').empty();
   for(var i = 0; i < posts.length;  i++){
     var postStr = '<div class="current-post"><p class="post" data-id="' + posts[i].id + '">'
-     + posts[i].text + '<a href="#" class="comments-link">  ' + posts[i].comments.length
-     + ' Comments</a><a href="#" class="likes-link"> ' + posts[i].likes
-     + ' Likes</a></p><div class="comments-block"></div><a href="#" class="remove">remove post</a> '
+     + posts[i].text + '<a href="#" class="comments-link">' + posts[i].comments.length
+     + ' Comments</a><a href="#" class="likes-link">' + posts[i].likes
+     + ' Likes</a></p><div class="comments-block"></div><a href="#" class="remove btn btn-warning">remove post</a><br> '
      + ' <form class="form-inline"><div class="form-group"><input type="text" class="form-control" id="userName" placeholder="User Name">'
      + '</div><div class="form-group"><input type="text" class="form-control" id="comment" placeholder="Comment">'
      + '</div><button type="submit" class="btn btn-primary post-comment">Post Comment</button></form></div>'
     $('.posts').append(postStr);
   }
 
+//bind buttons click events with callback functions
   $('.remove').on('click', function(){
+    event.preventDefault();
     removePost($(this).closest('.current-post'));
   });
   
   $('.post-comment').on('click', function(){
+    event.preventDefault();
     addComment($(this).closest('.current-post'));
   });
 
   $('.comments-link').on('click', function(){
-    publishComments($(this).closest('.current-post'));
+    event.preventDefault();
+    toggleComments($(this).closest('.current-post'));
   });
   
   $('.likes-link').on('click', function(){
+    event.preventDefault();
     addLike($(this).closest('.current-post'));
   });
 }
-
-
-
 
 //remove a post from the array and the screen
 function removePost(currentPost){

@@ -16,3 +16,9 @@
 .comments-block a{
   font-size: 12px;
 }
+a{
+  margin:2px;
+}
+.btn-warning{
+  margin-bottom: 5px;
+}
