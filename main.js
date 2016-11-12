@@ -45,7 +45,9 @@ function publishComments(currentPost){
   for(var i = 0; i < posts.length; i++){
     if(id == posts[i].id){
       for(var j = 0; j < posts[i].comments.length; j++ ){
-        var currentComment = "<p data-id='" + posts[i].comments[j].id + "'>" + posts[i].comments[j].userName + ": " + posts[i].comments[j].text + "<a href='#'' class='remove-comment'> remove comment</a></p>"
+        var currentComment = "<p data-id='" + posts[i].comments[j].id + "'>"
+         + posts[i].comments[j].userName + ": " + posts[i].comments[j].text
+         + "<a href='#'' class='remove-comment'>Remove Comment</a></p>";
         currentPost.find('.comments-block').eq(0).append(currentComment);
       }
       $('.remove-comment').on('click', removeComment);
@@ -69,7 +71,7 @@ function addComment(currentPost){
     for(var i = 0; i < posts.length; i++){
       if(id == posts[i].id){
         posts[i].comments.push(currentComment);      
-        currentPost.find('.comments-link').eq(0)[0].innerHTML = " " + posts[i].comments.length + " comments";
+        currentPost.find('.comments-link').eq(0)[0].innerHTML = " " + posts[i].comments.length + " Comments";
         publishComments(currentPost);
         return;
       }
@@ -86,7 +88,8 @@ function removeComment(){
       for(var j = 0; j < posts[i].comments.length; j++){
         if(commentId === posts[i].comments[j].id){
           posts[i].comments.splice(j, 1);
-          $(this).closest('.current-post').find('.comments-link').eq(0)[0].innerHTML = " " + posts[i].comments.length + " comments";
+          $(this).closest('.current-post').find('.comments-link').eq(0)[0].innerHTML = " "
+           + posts[i].comments.length + " Comments";
           $(this).closest('p').remove();
           return;
         }
@@ -113,8 +116,8 @@ function updatePosts(){
     var postStr = '<div class="current-post"><p class="post" data-id="' + posts[i].id + '">'
      + posts[i].text + '<a href="#" class="comments-link">' + posts[i].comments.length
      + ' Comments</a><a href="#" class="likes-link">' + posts[i].likes
-     + ' Likes</a></p><div class="comments-block"></div><a href="#" class="remove btn btn-warning">remove post</a><br> '
-     + ' <form class="form-inline"><div class="form-group"><input type="text" class="form-control" id="userName" placeholder="User Name">'
+     + ' Likes</a></p><div class="comments-block"></div><a href="#" class="remove btn btn-warning">Remove Post</a>'
+     + '<form class="form-inline"><div class="form-group"><input type="text" class="form-control" id="userName" placeholder="User Name">'
      + '</div><div class="form-group"><input type="text" class="form-control" id="comment" placeholder="Comment">'
      + '</div><button type="submit" class="btn btn-primary post-comment">Post Comment</button></form></div>'
     $('.posts').append(postStr);
