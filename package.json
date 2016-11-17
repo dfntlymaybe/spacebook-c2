@@ -1,0 +1,24 @@
+{
+  "name": "spacebook-c2",
+  "version": "1.0.0",
+  "description": "",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dfntlymaybe/spacebook-c2.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/dfntlymaybe/spacebook-c2/issues"
+  },
+  "homepage": "https://github.com/dfntlymaybe/spacebook-c2#readme",
+  "dependencies": {
+    "bootstrap": "^3.3.7",
+    "handlebars": "^4.0.6",
+    "jquery": "^3.1.1"
+  }
+}

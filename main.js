@@ -56,14 +56,19 @@ var spacebookApp = function(){
 
   //show comments of the post that were clicked on
   function publishComments($currentPost){
+
     $commentsBlock = $currentPost.find('.comments-block').eq(0).empty(); //clearing the comments block
     var id = $currentPost.find('.post').eq(0).data().id;
+
     for(var i = 0; i < posts.length; i++){
       if(id == posts[i].id){
         for(var j = 0; j < posts[i].comments.length; j++ ){
-          var currentComment = "<p data-id='" + posts[i].comments[j].id + "'>"
-           + posts[i].comments[j].userName + ": " + posts[i].comments[j].text
-           + "<a href='#'' class='remove-comment'>Remove Comment</a></p>";
+
+          //Creating comment using handlebars
+          var source   = $("#Comment-template").html();
+          var template = Handlebars.compile(source);
+          var currentComment = template(posts[i].comments[j]);
+
           $commentsBlock.append(currentComment);
         } 
 
@@ -138,15 +143,11 @@ var spacebookApp = function(){
   function updatePosts(){
     $('.posts').empty();
     for(var i = 0; i < posts.length;  i++){
-      var postStr = '<div class="current-post"><p class="post" data-id="' + posts[i].id + '">'
-       + posts[i].text + '<a href="#" class="comments-link">' + posts[i].comments.length
-       + ' Comments</a><a href="#" class="likes-link">' + posts[i].likes+ ' Likes</a></p>' 
-       + '<div class="comments-block"></div><a href="#" class="remove-post btn btn-warning">Remove Post</a>'
-       + '<form class="form-inline"><div class="form-group">'
-       + '<input type="text" class="form-control" placeholder="User Name">'
-       + '</div><div class="form-group"><input type="text" class="form-control" placeholder="Comment">'
-       + '</div><button type="submit" class="btn btn-primary post-comment">Post Comment</button></form></div>'
 
+      //Creating post using handlebars
+      var source   = $("#Post-template").html();
+      var template = Handlebars.compile(source);
+      var postStr = template(posts[i]);
       $('.posts').append(postStr);
     }
     
@@ -184,7 +185,6 @@ var spacebookApp = function(){
       }
     }      
   }
-
 
 
   return {

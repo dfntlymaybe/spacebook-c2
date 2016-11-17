@@ -1,12 +1,14 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <link href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="style.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+    <script type="text/javascript" src="node_modules/handlebars/dist/handlebars.min.js"></script>
+    <script src="node_modules/jquery/dist/jquery.min.js"></script>
   <title></title>
 </head>
 <body>
+
   <div class="row">
     <div class="col-md-6 col-md-offset-3">
       <div class="page-header">
@@ -14,7 +16,6 @@
       </div>
 
       <div class="posts">
-        
       </div>
 
       <form class="beer-form">
@@ -29,6 +30,43 @@
 
     </div>
   </div>
+
+
+  <script id="Post-template" type="text/x-handlebars-template">
+    
+    <div class="current-post">
+      <p class="post" data-id="{{id}}">
+        {{text}}<a href="#" class="comments-link">{{comments.length}} Comments</a><a href="#" class="likes-link">{{likes}} Likes</a>
+      </p>
+      
+        <div class="comments-block">
+        </div>
+
+        <a href="#" class="remove-post btn btn-warning">Remove Post</a>
+        <form class="form-inline">
+          <div class="form-group">
+            <input type="text" class="form-control" placeholder="User Name">
+          </div>
+          <div class="form-group">
+            <input type="text" class="form-control" placeholder="Comment">
+          </div>
+          <button type="submit" class="btn btn-primary post-comment">Post Comment</button>
+        </form>
+    </div>
+
+  </script>
+
+
+
+  <script id="Comment-template" type="text/x-handlebars-template">
+    
+    <p data-id='"{{id}}"'>
+      {{userName}} : {{text}}
+      <a href='#'' class='remove-comment'>Remove Comment</a>
+    </p>
+    
+
+  </script>
 
   <script src="main.js"></script>
 </body>
