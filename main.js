@@ -3,6 +3,8 @@ var spacebookApp = function(){
   //Main array of posts
   var posts = [];
 
+
+  //Local storage
   var STORAGE_ID = 'spacebook';
 
   var saveToLocalStorage = function () {
@@ -12,7 +14,6 @@ var spacebookApp = function(){
   var getFromLocalStorage = function () {
     posts = JSON.parse(localStorage.getItem(STORAGE_ID) || '[]');
   }
-
 
 
   //post object
@@ -64,7 +65,9 @@ var spacebookApp = function(){
            + posts[i].comments[j].userName + ": " + posts[i].comments[j].text
            + "<a href='#'' class='remove-comment'>Remove Comment</a></p>";
           $commentsBlock.append(currentComment);
-        }       
+        } 
+
+        //bind the remove button to event      
         $('.remove-comment').on('click', function(){
           event.preventDefault();
           removeComment($currentPost, $(this).closest('p'));
@@ -83,15 +86,15 @@ var spacebookApp = function(){
     if(userName != "" || userCcomment != ""){  //check that both fields are not empty
       var currentComment = new comment(userName,userCcomment);
       var id = $currentPost.find('p').eq(0).data().id;
-      //console.log(id);
+      
       for(var i = 0; i < posts.length; i++){
         if(id == posts[i].id){
           posts[i].comments.push(currentComment);
           saveToLocalStorage();
           updatePosts();
 
-          $currentPost = $(".post").find("[data-id='" + id + "']");
-
+          $currentPost = $(".post[data-id='" + id + "']").closest('.current-post');
+          publishComments($currentPost);
           return;
         }
       } 
